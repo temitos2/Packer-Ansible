@@ -1,7 +1,26 @@
 - hosts: all
   sudo: yes
   tasks:
-    - name: Installing nginx
-      apt: name=nginx update_cache=yes
-    - name: Starting nginx on boot
-      service: name=nginx enabled=yes state=started
+  - name: Installing nginx
+    apt: name=nginx update_cache=yes
+  - name: Starting nginx on boot
+    service: name=nginx enabled=yes state=started
+  - name: Install Python packages
+    apt: name={{ item }} state=installed
+    with_items:
+    - locales
+    - build-essential
+    - acl
+    - ntp
+    - htop
+    - git
+    - python-pip
+    - python3-pip
+
+    tags:
+    - packages
+
+  - name: Upgrade pip
+    pip: name=pip state=latest
+    tags:
+    - packages
